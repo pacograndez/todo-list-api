@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+// Para usar output personalizado
+// generator client {
+//  provider = "prisma-client-js"
+//  output   = "../generated/prisma"
+// }
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String    @id @default(uuid())
+  email String @unique
+  Task  Task[]
+}
+
+model Task {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  completed Boolean  @default(false)
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
