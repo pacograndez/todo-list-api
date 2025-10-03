@@ -1,98 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Todo List API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esta es una API RESTful construida con NestJS para gestionar una lista de tareas (To-Do list). Incluye funcionalidades para el registro de usuarios, autenticación mediante JWT y operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para las tareas.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tecnologías y Herramientas
 
-## Description
+*   **[NestJS](https://nestjs.com/):** Framework progresivo de Node.js para construir aplicaciones eficientes y escalables del lado del servidor.
+*   **[TypeScript](https://www.typescriptlang.org/):** Superconjunto de JavaScript que añade tipado estático.
+*   **[Prisma](https://www.prisma.io/):** ORM de próxima generación para Node.js y TypeScript.
+*   **[SQLite](https://www.sqlite.org/):** Base de datos SQL ligera y autocontenida, usada para desarrollo.
+*   **[Passport.js](http://www.passportjs.org/):** Middleware de autenticación para Node.js, utilizado para la estrategia de JWT.
+*   **[Swagger](https://swagger.io/):** Herramienta para diseñar, construir, documentar y consumir servicios RESTful.
+*   **[Class-Validator](https://github.com/typestack/class-validator):** Librería para la validación de DTOs basada en decoradores.
+*   **[Class-Transformer](https://github.com/typestack/class-transformer):** Librería para transformar objetos planos a objetos de clase y viceversa.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Arquitectura del Proyecto
 
-## Project setup
+El proyecto sigue una **arquitectura modular**, que es una de las fortalezas clave de NestJS. Esta arquitectura se eligió por las siguientes razones:
 
-```bash
-$ npm install
-```
+*   **Separación de Responsabilidades (SoC):** La aplicación está dividida en módulos cohesivos por funcionalidad (`Users`, `Auth`, `Tasks`). Cada módulo encapsula su propia lógica de negocio, controladores, servicios y modelos de datos (DTOs), haciendo que el código sea más fácil de entender, mantener y escalar.
+*   **Alta Cohesión y Bajo Acoplamiento:** Los módulos están diseñados para ser independientes entre sí. Por ejemplo, el `TasksModule` no necesita conocer los detalles de implementación del `AuthModule`; simplemente confía en los mecanismos de autenticación que NestJS provee (como los Guards).
+*   **Reusabilidad:** Módulos como `PrismaModule` y `ConfigModule` están diseñados para ser compartidos y reutilizados a lo largo de toda la aplicación, proveyendo una única fuente de verdad para la conexión a la base de datos y la gestión de la configuración.
 
-## Compile and run the project
+Este enfoque modular no solo organiza el código de manera lógica, sino que también facilita las pruebas unitarias y de integración, y permite que diferentes desarrolladores puedan trabajar en distintas funcionalidades de forma paralela con un menor riesgo de conflictos.
+
+## Getting Started
+
+Sigue estas instrucciones para tener una copia del proyecto funcionando en tu máquina local.
+
+### 1. Instalación
+
+Clona el repositorio e instala las dependencias usando npm:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 2. Configuración del Entorno
+
+El proyecto utiliza variables de entorno para su configuración. Crea un archivo `.env` en la raíz del proyecto, puedes usar el archivo `.env.example` como guía.
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+El archivo `.env` contendrá las siguientes variables:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+*   `PORT`: El puerto en el que correrá la aplicación (ej. 3000).
+*   `DATABASE_URL`: La URL de conexión a la base de datos Prisma.
+*   `JWT_SECRET`: Una clave secreta larga y compleja para firmar los tokens JWT.
+*   `JWT_EXPIRES_IN`: El tiempo de expiración para los tokens (ej. `1h`, `7d`).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Ejecución de la Aplicación
+
+Una vez instalado y configurado, puedes ejecutar la aplicación en diferentes modos:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Modo de desarrollo con auto-recarga
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+```bash
+# Modo de producción (requiere compilación previa con npm run build)
+npm run start:prod
+```
 
-## Resources
+### Usuario de Pruebas
 
-Check out a few resources that may come in handy when working with NestJS:
+Para probar la funcionalidad de login y los endpoints protegidos, puedes registrar un nuevo usuario. El endpoint de registro espera un `email`.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Para facilitar las pruebas, puedes registrar y usar el siguiente email:
+*   **Email:** `test@example.com`
 
-## Support
+## Documentación de la API (Swagger)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Una vez que la aplicación esté en ejecución, la documentación interactiva de la API estará disponible en la siguiente ruta:
 
-## Stay in touch
+[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Desde esta interfaz podrás ver todos los endpoints, sus descripciones, los datos que esperan y las respuestas que devuelven. También podrás probar los endpoints protegidos añadiendo tu token de acceso JWT en el botón "Authorize".
